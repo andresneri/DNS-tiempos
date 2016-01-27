@@ -1,0 +1,9 @@
+when DNS_REQUEST {
+set hsl [HSL::open -proto UDP -pool pool_splunk ]
+set dns_rqs [clock clicks -milliseconds]
+}
+when DNS_RESPONSE {
+set dns_rsp [clock clicks -milliseconds]
+#log local0. "tmp:[expr ($dns_rsp - $dns_rqs )] ms src:[DNS::origin] type:[DNS::question type] dom:[DNS::question name]"
+HSL::send $hsl "tmp:[expr ($dns_rsp - $dns_rqs )] ms src:[DNS::origin] type:[DNS::question type] dom:[DNS::question name]"
+}
